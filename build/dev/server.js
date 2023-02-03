@@ -2,16 +2,8 @@
  * @file server.js
  */
 
-const path = require('path');
-const env = process.env.NODE_ENV;
-
-// Statics
-const webpackConfig = require('./webpack.config.dev.js');
-const envConfig = require(`../env/config.${env}.js`);
-
 // Vendors
-// const os = require('os');
-// const chokidar = require('chokidar');
+const path = require('path');
 const open = require('open');
 const express = require('express');
 const webpack = require('webpack');
@@ -21,6 +13,12 @@ const webpackDevMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const logger = require('fancy-node-logger');
 
+// Statics
+const webpackConfig = require('./webpack.config.dev.js');
+const profiles = require('../../profiles');
+
+const env = process.env.NODE_ENV;
+const envConfig = profiles[env];
 const port = process.env.PORT || envConfig.port;
 const url = 'http://localhost:' + port;
 const proxyTable = envConfig.proxyTable;

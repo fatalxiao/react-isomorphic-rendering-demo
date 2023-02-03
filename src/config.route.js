@@ -22,8 +22,8 @@ export default function configureRoutes(store) {
     return [{
         ...configureRootRoutes(store),
         routes: [
-            configureModuleARoutes,
-            configureModuleBRoutes
+            configureModuleARoutes(store),
+            configureModuleBRoutes(store)
         ]
     }];
 }

@@ -29,10 +29,27 @@ const AppContainerRoutes = () => {
         history
     ]);
 
+    const routes = useMemo(() => {
+        return configureRoutes(store);
+    }, [
+        store
+    ]);
+
+    const content = useMemo(() => {
+        return renderRoutes(routes);
+    }, [
+        routes
+    ]);
+
+    console.log('history::', history);
+    console.log('store::', store);
+    console.log('routes::', routes);
+    console.log('content::', content);
+
     return (
         <Provider store={store}>
             <ConnectedRouter history={history}>
-                {renderRoutes(configureRoutes(store))}
+                {content}
             </ConnectedRouter>
         </Provider>
     );
