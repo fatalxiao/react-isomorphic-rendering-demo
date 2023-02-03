@@ -41,10 +41,10 @@ const AppContainerRoutes = () => {
         routes
     ]);
 
-    console.log('history::', history);
-    console.log('store::', store);
-    console.log('routes::', routes);
-    console.log('content::', content);
+    // console.log('history::', history);
+    // console.log('store::', store);
+    // console.log('routes::', routes);
+    // console.log('content::', content);
 
     return (
         <Provider store={store}>

@@ -55,7 +55,7 @@ app.use('/', (request, response) => {
             <AppContainer/>
         </StaticRouter>,
         {
-            bootstrapScripts: ['/index.js'],
+            // bootstrapScripts: ['/index.js'],
             onShellReady() {
                 response.setHeader('content-type', 'text/html');
                 pipe(response);
