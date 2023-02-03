@@ -1,0 +1,24 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Idea project files
+.idea
+
+# Vscode project files
+.editorconfig
+.vscode
+
+# os caches
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Dependency directories
+node_modules
+.sass-cache
+package-lock.json
+
+# Dist directories
+/dist
