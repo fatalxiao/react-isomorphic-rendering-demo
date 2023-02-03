@@ -2,36 +2,69 @@
  * @file AppContainer.js
  */
 
-import React from 'react';
+import React, {useMemo} from 'react';
 import PropTypes from 'prop-types';
 
 // Components
-import AppContainerRoutes from './AppContainerRoutes';
+import HTML from './HTML';
+
+// Vendors
+import {createBrowserHistory, createMemoryHistory} from 'history';
+import {renderRoutes} from 'react-router-config';
+import {Provider} from 'react-redux';
+import {ConnectedRouter} from 'vivy-router';
+
+// Configs
+import configureStore from '../src/config.store';
+import configureRoutes from '../src/config.route';
 
 const AppContainer = ({
     children
-}) => (
-    <html lang="en">
-        <head>
+}) => {
 
-            <title></title>
+    const history = useMemo(() => {
+        return typeof window === 'undefined' ?
+            createMemoryHistory()
+            :
+            createBrowserHistory();
+    }, []);
 
-            <meta name="viewport"
-                  content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
-            <meta name="format-detection"
-                  content="telephone=no"/>
+    const store = useMemo(() => {
+        return configureStore(history);
+    }, [
+        history
+    ]);
 
-            {/* <link rel="stylesheet"*/}
-            {/*      href={compile('./src/assets/scss/index.scss').css}/>*/}
+    const routes = useMemo(() => {
+        return configureRoutes(store);
+    }, [
+        store
+    ]);
 
-        </head>
-        <body>
+    const content = useMemo(() => {
+        return renderRoutes(routes);
+    }, [
+        routes
+    ]);
+
+    // console.log('history::', history);
+    // console.log('store::', store);
+    // console.log('routes::', routes);
+    // console.log('content::', content);
+
+    return (
+        <HTML>
             <div id="app-container">
-                <AppContainerRoutes/>
+                <Provider store={store}>
+                    <ConnectedRouter history={history}>
+                        {content}
+                    </ConnectedRouter>
+                </Provider>
             </div>
-        </body>
-    </html>
-);
+        </HTML>
+    );
+
+};
 
 AppContainer.propTypes = {
     children: PropTypes.any
