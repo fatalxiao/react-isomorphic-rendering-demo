@@ -12,9 +12,9 @@ import {AsyncComponent} from 'vivy-async-component';
  */
 export default function configureRoutes(store) {
     return {
-        path: '/module-a',
-        component: AsyncComponent(() => import('./containers/ModuleA'), store, [
-            () => import('./models/moduleA')
+        path: '/module-b',
+        component: AsyncComponent(() => import('./containers/ModuleB'), store, [
+            () => import('./models/moduleB')
         ])
     };
 }

@@ -4,6 +4,8 @@
 
 // Routes config
 import configureRootRoutes from 'modules/Root/config.route';
+import configureModuleARoutes from 'modules/ModuleA/config.route';
+import configureModuleBRoutes from 'modules/ModuleB/config.route';
 
 /**
  * Default Route
@@ -18,9 +20,10 @@ export const DEFAULT_ROUTE = '/';
  */
 export default function configureRoutes(store) {
     return [{
-        // Root
-        // path: '/'
         ...configureRootRoutes(store),
-        routes: []
+        routes: [
+            configureModuleARoutes,
+            configureModuleBRoutes
+        ]
     }];
 }
