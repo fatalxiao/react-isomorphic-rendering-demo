@@ -15,12 +15,12 @@ import './style.scss';
 const Root = ({
     route
 }) => (
-    <div className="root">
-        Root
-        <div className="root-content">
-            {renderRoutes(route.routes)}
-        </div>
-    </div>
+    <ul className="root">
+        <li>
+            Root
+        </li>
+        {renderRoutes(route.routes)}
+    </ul>
 );
 
 Root.propTypes = {

@@ -15,12 +15,12 @@ import './style.scss';
 const ModuleA = ({
     route
 }) => (
-    <div className="module-a">
-        ModuleA
-        <div className="module-a-content">
-            {renderRoutes(route.routes)}
-        </div>
-    </div>
+    <ul className="module-a">
+        <li>
+            ModuleA
+        </li>
+        {renderRoutes(route.routes)}
+    </ul>
 );
 
 ModuleA.propTypes = {
