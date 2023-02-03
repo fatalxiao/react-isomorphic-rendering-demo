@@ -5,6 +5,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// Components
+import AppContainerRoutes from './AppContainerRoutes';
+
 const AppContainer = ({
     children
 }) => (
@@ -24,7 +27,7 @@ const AppContainer = ({
         </head>
         <body>
             <div id="app-container">
-                {children}
+                <AppContainerRoutes/>
             </div>
         </body>
     </html>

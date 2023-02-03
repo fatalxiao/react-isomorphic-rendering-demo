@@ -49,7 +49,7 @@ app.use(express.static(path.join(__dirname, 'dist'), {
         'no-cache, no-store, no_store, max-age=0, must-revalidate' : 'max-age=2592000')
 }));
 
-app.use('/*', (request, response) => {
+app.use('/', (request, response) => {
     const {pipe} = renderToPipeableStream(
         <StaticRouter location={request.url}>
             <AppContainer/>

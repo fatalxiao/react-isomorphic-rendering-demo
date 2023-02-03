@@ -2,10 +2,10 @@
  * @file AppContainerRoutes.js
  */
 
-import React from 'react';
+import React, {useMemo} from 'react';
 
 // Vendors
-import {createBrowserHistory} from 'history';
+import {createBrowserHistory, createMemoryHistory} from 'history';
 import {renderRoutes} from 'react-router-config';
 import {Provider} from 'react-redux';
 import {ConnectedRouter} from 'vivy-router';
@@ -16,17 +16,19 @@ import configureRoutes from '../src/config.route';
 
 const AppContainerRoutes = () => {
 
-    if (typeof window === 'undefined') {
-        const store = configureStore();
-        return (
-            <Provider store={store}>
-                {renderRoutes(configureRoutes(store))}
-            </Provider>
-        );
-    }
+    const history = useMemo(() => {
+        return typeof window === 'undefined' ?
+            createMemoryHistory()
+            :
+            createBrowserHistory();
+    }, []);
 
-    const history = createBrowserHistory();
-    const store = configureStore(history);
+    const store = useMemo(() => {
+        return configureStore(history);
+    }, [
+        history
+    ]);
+
     return (
         <Provider store={store}>
             <ConnectedRouter history={history}>
