@@ -73,7 +73,6 @@ const prodConfig = {
         new HtmlPlugin({
             filename: config.index,
             template: './src/index.html',
-            favicon: './src/assets/icons/favicon.ico',
             inject: true,
             NODE_ENV: env,
             minify: {
