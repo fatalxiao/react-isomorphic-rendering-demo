@@ -7,7 +7,7 @@
 
 // React
 import React from 'react';
-import {StaticRouter} from 'react-router-dom';
+import {StaticRouter} from 'react-router-dom/server';
 import {renderToPipeableStream} from 'react-dom/server';
 
 // Components
@@ -49,39 +49,51 @@ const uri = 'http://localhost:' + port;
 //         'no-cache, no-store, no_store, max-age=0, must-revalidate' : 'max-age=2592000')
 // }));
 
-const render = (request, response) => {
-
-    let didError = false;
-
-    return new Promise((resolve, reject) => {
-        const stream = renderToPipeableStream(
-            <StaticRouter location={request.url}>
-                <AppContainer/>
-            </StaticRouter>,
-            {
-                // bootstrapScripts: ['/index.js'],
-                onShellReady() {
-                    response.statusCode = didError ? 500 : 200;
-                    response.setHeader('content-type', 'text/html');
-                    stream.pipe(response);
-                    resolve();
-                },
-                onError() {
-                    didError = true;
-                    reject();
-                }
-            }
-        );
-        setTimeout(() => {
-            stream.abort();
-            reject();
-        }, 10000);
-    });
-
-};
+// const render = (request, response) => {
+//
+//     let didError = false;
+//
+//     return new Promise((resolve, reject) => {
+//         const stream = renderToPipeableStream(
+//             // <StaticRouter location={request.url}>
+//             <AppContainer location={request.url}/>,
+//             // </StaticRouter>,
+//             {
+//                 // bootstrapScripts: ['/index.js'],
+//                 onShellReady() {
+//                     response.statusCode = didError ? 500 : 200;
+//                     response.setHeader('content-type', 'text/html');
+//                     stream.pipe(response);
+//                     resolve();
+//                 },
+//                 onError() {
+//                     didError = true;
+//                     reject();
+//                 }
+//             }
+//         );
+//         setTimeout(() => {
+//             stream.abort();
+//             reject();
+//         }, 10000);
+//     });
+//
+// };
 
 app.use('/', async (request, response) => {
-    await render(request, response);
+    // await render(request, response);
+    const stream = renderToPipeableStream(
+        <StaticRouter location={request.url}>
+            <AppContainer/>
+        </StaticRouter>,
+        {
+            // bootstrapScripts: ['/index.js'],
+            onShellReady() {
+                response.setHeader('content-type', 'text/html');
+                stream.pipe(response);
+            }
+        }
+    );
 });
 
 // app.use(history());

@@ -2,22 +2,22 @@
  * @file AppContainer.js
  */
 
-import React, {lazy, Suspense, useMemo} from 'react';
+import React/* , {lazy, Suspense, useMemo} */ from 'react';
 import PropTypes from 'prop-types';
-import {BrowserRouter, Switch, Route} from 'react-router-dom';
 
 // Components
 import HTML from './HTML';
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
 
 // Vendors
-import {createBrowserHistory, createMemoryHistory} from 'history';
-import {renderRoutes} from 'react-router-config';
-import {Provider} from 'react-redux';
-import {ConnectedRouter} from 'vivy-router';
+// import {createBrowserHistory, createMemoryHistory} from 'history';
+// import {renderRoutes} from 'react-router-config';
+// import {Provider} from 'react-redux';
+// import {ConnectedRouter} from 'vivy-router';
 
 // Configs
-import configureStore from '../src/config.store';
-import configureRoutes from '../src/config.route';
+// import configureStore from '../src/config.store';
+// import configureRoutes from '../src/config.route';
 
 const ROUTES = [{
     path: '/',
@@ -37,7 +37,7 @@ const ROUTES = [{
 }];
 
 const AppContainer = ({
-    children
+    children, location
 }) => {
     //
     // const history = useMemo(() => {
@@ -74,9 +74,11 @@ const AppContainer = ({
         return (
             <HTML>
                 <div id="app-container">
-                    {ROUTES.map(({path, element}) => (
-                        <Route key={path} path={path} element={element}/>
-                    ))}
+                    <Routes>
+                        {ROUTES.map(({path, element}) => (
+                            <Route key={path} path={path} element={element}/>
+                        ))}
+                    </Routes>
                 </div>
             </HTML>
         );
@@ -86,11 +88,11 @@ const AppContainer = ({
         <HTML>
             <div id="app-container">
                 <BrowserRouter>
-                    <Switch>
+                    <Routes>
                         {ROUTES.map(({path, element}) => (
                             <Route key={path} path={path} element={element}/>
                         ))}
-                    </Switch>
+                    </Routes>
                 </BrowserRouter>
             </div>
         </HTML>
@@ -111,7 +113,8 @@ const AppContainer = ({
 };
 
 AppContainer.propTypes = {
-    children: PropTypes.any
+    children: PropTypes.any,
+    location: PropTypes.object
 };
 
 export default AppContainer;
