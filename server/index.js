@@ -3,7 +3,7 @@
  */
 
 // Node
-import path from 'path';
+// import path from 'path';
 
 // React
 import React from 'react';
@@ -15,7 +15,7 @@ import AppContainer from '../client/AppContainer';
 
 // Vendors
 import express from 'express';
-import {createProxyMiddleware} from 'http-proxy-middleware';
+// import {createProxyMiddleware} from 'http-proxy-middleware';
 // import history from 'connect-history-api-fallback';
 // import compression from 'compression';
 
@@ -27,41 +27,61 @@ const env = process.env.NODE_ENV;
 const app = express();
 const port = process.env.port || profiles[env].port;
 const uri = 'http://localhost:' + port;
-const proxyTable = profiles[env].proxyTable;
+// const proxyTable = profiles[env].proxyTable;
 
-Object.keys(proxyTable).forEach(context => {
+// Object.keys(proxyTable).forEach(context => {
+//
+//     let options = proxyTable[context];
+//
+//     if (typeof options === 'string') {
+//         options = {
+//             target: options,
+//             changeOrigin: true
+//         };
+//     }
+//
+//     app.use(createProxyMiddleware(options.filter || context, options));
+//
+// });
 
-    let options = proxyTable[context];
+// app.use(express.static(path.join(__dirname, 'dist'), {
+//     setHeaders: (res, path) => res.setHeader('Cache-Control', path.endsWith('index.html') ?
+//         'no-cache, no-store, no_store, max-age=0, must-revalidate' : 'max-age=2592000')
+// }));
 
-    if (typeof options === 'string') {
-        options = {
-            target: options,
-            changeOrigin: true
-        };
-    }
+const render = (request, response) => {
 
-    app.use(createProxyMiddleware(options.filter || context, options));
+    let didError = false;
 
-});
-
-app.use(express.static(path.join(__dirname, 'dist'), {
-    setHeaders: (res, path) => res.setHeader('Cache-Control', path.endsWith('index.html') ?
-        'no-cache, no-store, no_store, max-age=0, must-revalidate' : 'max-age=2592000')
-}));
-
-app.use('/', (request, response) => {
-    const {pipe} = renderToPipeableStream(
-        <StaticRouter location={request.url}>
-            <AppContainer/>
-        </StaticRouter>,
-        {
-            // bootstrapScripts: ['/index.js'],
-            onShellReady() {
-                response.setHeader('content-type', 'text/html');
-                pipe(response);
+    return new Promise((resolve, reject) => {
+        const stream = renderToPipeableStream(
+            <StaticRouter location={request.url}>
+                <AppContainer/>
+            </StaticRouter>,
+            {
+                // bootstrapScripts: ['/index.js'],
+                onShellReady() {
+                    response.statusCode = didError ? 500 : 200;
+                    response.setHeader('content-type', 'text/html');
+                    stream.pipe(response);
+                    resolve();
+                },
+                onError() {
+                    didError = true;
+                    reject();
+                }
             }
-        }
-    );
+        );
+        setTimeout(() => {
+            stream.abort();
+            reject();
+        }, 10000);
+    });
+
+};
+
+app.use('/', async (request, response) => {
+    await render(request, response);
 });
 
 // app.use(history());
